@@ -1,13 +1,10 @@
 package com;
 
-import com.Controller.dao.ConnectionSQL;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import  javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.fxml.FXMLLoader;
-import java.sql.Connection;
-import java.sql.SQLException;
 
 public class Main extends Application{
 
@@ -29,8 +26,8 @@ public class Main extends Application{
     public void changeScene(String fxml) throws Exception{
         Parent pane = FXMLLoader.load(getClass().getResource(fxml));
         pane.getStylesheets().add(String.valueOf(getClass().getResource("./resources/styles.css")));
-        stage.setHeight(600);
-        stage.setWidth(800);
+        stage.setHeight(800);
+        stage.setWidth(1086);
         stage.getScene().setRoot(pane);
     }
 

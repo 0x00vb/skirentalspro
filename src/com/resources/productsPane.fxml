@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<Pane prefHeight="743.0" prefWidth="1064.0" style="-fx-background-color: lightgray;" fx:controller="com.Controller.ProductsController" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <TableView fx:id="productTable" prefHeight="743.0" prefWidth="656.0">
+        <columns>
+            <TableColumn fx:id="idColumn" prefWidth="75.0" text="id" />
+            <TableColumn fx:id="nameColumn" prefWidth="133.0" text="name" />
+            <TableColumn fx:id="brandColumn" prefWidth="122.0" text="brand" />
+            <TableColumn fx:id="categoryColumn" prefWidth="125.0" text="category" />
+            <TableColumn fx:id="costPriceColumn" prefWidth="104.0" text="costPrice" />
+            <TableColumn fx:id="sellPriceColumn" prefWidth="96.0" text="sellPrice" />
+        </columns>
+      </TableView>
+      <AnchorPane layoutX="666.0" layoutY="15.0" prefHeight="713.0" prefWidth="382.0">
+         <children>
+            <Button fx:id="addProdBtn" layoutX="128.0" layoutY="642.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="131.0" text="Add product" />
+            <TextField fx:id="prodNameTxt" layoutX="100.0" layoutY="422.0" prefHeight="33.0" prefWidth="269.0" />
+            <Label layoutX="29.0" layoutY="427.0" prefHeight="24.0" prefWidth="71.0" text="Name" />
+            <TextField fx:id="prodBrandTxt" layoutX="100.0" layoutY="460.0" prefHeight="33.0" prefWidth="269.0" />
+            <TextField fx:id="prodCatTxt" layoutX="100.0" layoutY="504.0" prefHeight="33.0" prefWidth="269.0" />
+            <Label layoutX="29.0" layoutY="464.0" prefHeight="24.0" prefWidth="71.0" text="Brand" />
+            <Label layoutX="20.0" layoutY="509.0" prefHeight="24.0" prefWidth="71.0" text="Category" />
+            <Label layoutX="29.0" layoutY="550.0" prefHeight="24.0" prefWidth="71.0" text="CostPrice" />
+            <Label layoutX="29.0" layoutY="588.0" prefHeight="24.0" prefWidth="71.0" text="SellPrice" />
+            <TextField fx:id="prodCostTxt" layoutX="100.0" layoutY="545.0" prefHeight="33.0" prefWidth="269.0" />
+            <TextField fx:id="prodSellTxt" layoutX="100.0" layoutY="583.0" prefHeight="33.0" prefWidth="269.0" />
+            <Separator layoutX="2.0" layoutY="358.0" prefHeight="0.0" prefWidth="382.0" />
+            <Label layoutX="40.0" layoutY="246.0" prefHeight="24.0" prefWidth="107.0" text="Search product" />
+            <TextField fx:id="prodIdTxt" layoutX="157.0" layoutY="242.0" prefHeight="33.0" prefWidth="190.0" />
+            <Button fx:id="searchProdBtn" layoutX="129.0" layoutY="285.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="131.0" text="Search" />
+            <Label layoutX="38.0" layoutY="37.0" prefHeight="24.0" prefWidth="45.0" text="Filter:" />
+            <Label layoutX="20.0" layoutY="377.0" prefHeight="25.0" prefWidth="203.0" text="Add new product" underline="true" wrapText="true">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+   </children>
+</Pane>

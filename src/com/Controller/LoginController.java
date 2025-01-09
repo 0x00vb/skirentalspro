@@ -1,7 +1,7 @@
 package com.Controller;
 
+import com.model.User;
 import com.Main;
-import com.Controller.dao.ConnectionSQL;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -10,14 +10,11 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.ResultSet;
 
-public class Login {
-    private Connection conn = ConnectionSQL.getConnection();
+public class LoginController {
+    private UsersController usersController = new UsersController();
 
-    public Login(){}
+    public LoginController(){}
 
     @FXML
     private Button button;
@@ -36,11 +33,9 @@ public class Login {
                 wrongLogin.setText("Please enter your credentials!");
                 return;
             }
-            PreparedStatement stmt = conn.prepareCall("SELECT password FROM users WHERE username = ?");
-            stmt.setString(1, username.getText());
-            ResultSet rs = stmt.executeQuery();
-            if(rs.next()){
-                if(rs.getString("password").equals(password.getText())){
+            User user = usersController.getUser(username.getText());
+            if(user != null){
+                if(user.getPassword().equals(password.getText())){
                     m.changeScene("./resources/main.fxml");
                     wrongLogin.setText("Loged In!");
                 }else{
@@ -51,7 +46,7 @@ public class Login {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            wrongLogin.setText("[!] Database ERROR!");
+            wrongLogin.setText("[!] Connection ERROR!");
         }
     }
 }
