@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.Controller.ClientsController">
+    <children>
+        <AnchorPane VBox.vgrow="ALWAYS">
+
+            <children>
+                <SplitPane dividerPositions="0.7" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <items>
+                        <!-- Left side with table -->
+                        <AnchorPane>
+                            <children>
+                                <TableView fx:id="clientTable" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <columns>
+                                        <TableColumn fx:id="idColumn" text="ID" />
+                                        <TableColumn fx:id="firstNameColumn" text="First Name" />
+                                        <TableColumn fx:id="lastNameColumn" text="Last Name" />
+                                        <TableColumn fx:id="phoneNumberColumn" text="Phone Number" />
+                                        <TableColumn fx:id="addressColumn" text="Address" />
+                                    </columns>
+                                    <columnResizePolicy>
+                                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                    </columnResizePolicy>
+                                </TableView>
+                            </children>
+                        </AnchorPane>
+
+                        <!-- Right side with form -->
+                        <VBox spacing="15" style="-fx-padding: 15;">
+                            <children>
+                                <Label text="Add new client" underline="true">
+                                    <font>
+                                        <Font size="20.0" />
+                                    </font>
+                                </Label>
+
+                                <VBox spacing="5">
+                                    <Label text="First Name" />
+                                    <TextField fx:id="firstNameTxt" maxWidth="Infinity" />
+                                </VBox>
+
+                                <VBox spacing="5">
+                                    <Label text="Last Name" />
+                                    <TextField fx:id="lastNameTxt" maxWidth="Infinity" />
+                                </VBox>
+
+                                <VBox spacing="5">
+                                    <Label text="Phone Number" />
+                                    <TextField fx:id="phoneNumberTxt" maxWidth="Infinity" />
+                                </VBox>
+
+                                <VBox spacing="5">
+                                    <Label text="Address" />
+                                    <TextField fx:id="addressTxt" maxWidth="Infinity" />
+                                </VBox>
+
+                                <Button fx:id="addClientBtn" maxWidth="Infinity" text="Add Client" />
+                            </children>
+                        </VBox>
+                    </items>
+                </SplitPane>
+            </children>
+        </AnchorPane>
+    </children>
+</VBox>

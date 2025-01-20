@@ -1,7 +1,10 @@
 package com.Controller;
 
+import com.Controller.Services.ProductsService;
+import com.Controller.Services.RentalsService;
 import com.dao.ProductSQL;
 import com.model.Product;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -11,6 +14,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import java.util.ArrayList;
 
+import static com.utils.Alert.showAlert;
+
 public class ProductsController {
     @FXML
     private TableView<Product> productTable;
@@ -18,11 +23,9 @@ public class ProductsController {
     @FXML
     private TableColumn<Product, Integer> idColumn;
     @FXML
-    private TableColumn<Product, String> nameColumn;
+    private TableColumn<Product, String> nameColumn, brandColumn, categoryColumn;
     @FXML
-    private TableColumn<Product, String> brandColumn;
-    @FXML
-    private TableColumn<Product, String> categoryColumn;
+    private TableColumn<Product, Boolean> rentedColumn;
     @FXML
     private TableColumn<Product, Double> costPriceColumn;
     @FXML
@@ -35,7 +38,6 @@ public class ProductsController {
     private Button addProdBtn, searchProdBtn;
 
     private ObservableList<Product> products = FXCollections.observableArrayList();
-    private final ProductSQL productSQL = new ProductSQL();
 
     @FXML
     public void initialize() {
@@ -46,15 +48,58 @@ public class ProductsController {
         categoryColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCategory()));
         costPriceColumn.setCellValueFactory(cellData -> new SimpleDoubleProperty(cellData.getValue().getCostPrice()).asObject());
         sellPriceColumn.setCellValueFactory(cellData -> new SimpleDoubleProperty(cellData.getValue().getSellPrice()).asObject());
+        rentedColumn.setCellValueFactory( cellData -> new SimpleBooleanProperty(cellData.getValue().getIsRented()));
 
-        // Load initial data
-        products.addAll(productSQL.loadProducts());
-        productTable.setItems(products); // causes error
+        if (ProductsService.getProducts().isEmpty()) {
+            ProductsService.loadProducts();
+        }
 
+        // Set the rentals list to the table
+        productTable.setItems(ProductsService.getProducts());
 
         // Set button actions
         addProdBtn.setOnAction(e -> addProduct());
         searchProdBtn.setOnAction(e -> searchProduct());
+
+        // Create context menu
+        ContextMenu contextMenu = new ContextMenu();
+        MenuItem deleteItem = new MenuItem("Delete");
+        contextMenu.getItems().add(deleteItem);
+
+        // Set up row factory for the table
+        productTable.setRowFactory(tv -> {
+            TableRow<Product> row = new TableRow<>();
+
+            // Only show context menu on rows with data
+            row.setOnContextMenuRequested(event -> {
+                if (!row.isEmpty()) {
+                    contextMenu.show(row, event.getScreenX(), event.getScreenY());
+                }
+            });
+
+            // Optional: Also handle double click
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && !row.isEmpty()) {
+                    contextMenu.show(row, event.getScreenX(), event.getScreenY());
+                }
+            });
+
+            return row;
+        });
+
+        // Set the delete action
+        deleteItem.setOnAction(e -> {
+            Product selectedProduct = productTable.getSelectionModel().getSelectedItem();
+            if (selectedProduct != null) {
+                if (ProductSQL.deleteProduct(selectedProduct.getId())) {
+                    ProductsService.getProducts().remove(selectedProduct);
+                    productTable.refresh();
+                    showAlert("Success", "Product deleted successfully.");
+                } else {
+                    showAlert("Error", "Failed to delete product.");
+                }
+            }
+        });
     }
 
     private void addProduct() {
@@ -65,16 +110,15 @@ public class ProductsController {
             double costPrice = Double.parseDouble(prodCostTxt.getText());
             double sellPrice = Double.parseDouble(prodSellTxt.getText());
 
-            Product newProduct = new Product(0, name, brand, category, costPrice, sellPrice);
-            if (productSQL.addProduct(newProduct)) {
-                productSQL.loadProducts();
+            if (ProductsService.addProduct(name, brand, category, costPrice, sellPrice)) {
                 clearInputs();
+                productTable.refresh();
                 showAlert("Success", "Product added successfully.");
             } else {
-                showAlert("Error", "Failed to add product.");
+                    showAlert("Error", "Failed to add product.");
             }
         } catch (Exception e) {
-            showAlert("Error", "Invalid input data.");
+                showAlert("Error", "Invalid input data.");
         }
     }
 
@@ -85,13 +129,6 @@ public class ProductsController {
         prodCostTxt.clear();
         prodSellTxt.clear();
         prodIdTxt.clear();
-    }
-
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 
     private void searchProduct() {
@@ -109,8 +146,7 @@ public class ProductsController {
         try {
             int id = Integer.parseInt(searchId);
 
-            // Search in the in-memory list
-            Product foundProduct = products.stream()
+            Product foundProduct = ProductsService.getProducts().stream()
                     .filter(product -> product.getId() == id)
                     .findFirst()
                     .orElse(null);

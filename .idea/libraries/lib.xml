@@ -4,6 +4,8 @@
       <root url="file://$USER_HOME$/Downloads/javafx-sdk-21.0.5/lib" />
       <root url="file://$USER_HOME$/Downloads/javafx-sdk-21.0.5/lib" />
       <root url="jar://$USER_HOME$/Downloads/mysql-connector-j-9.1.0/mysql-connector-j-9.1.0.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/controlsfx-11.1.1.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/charm-glisten-6.1.0.jar!/" />
     </CLASSES>
     <JAVADOC />
     <NATIVE>

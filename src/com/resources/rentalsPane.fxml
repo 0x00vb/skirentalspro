@@ -1,23 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<Pane prefHeight="743.0" prefWidth="1064.0" style="-fx-background-color: lightgray;" xmlns="http://javafx.com/javafx/22" fx:controller="com.Controller.RentalsController" xmlns:fx="http://javafx.com/fxml/1">
+<VBox VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.Controller.RentalsController">
    <children>
-      <TableView prefHeight="743.0" prefWidth="684.0">
-         <columns>
-            <TableColumn prefWidth="51.0" text="id" />
-            <TableColumn prefWidth="116.0" text="client" />
-            <TableColumn prefWidth="61.0" text="idProduct" />
-            <TableColumn prefWidth="193.0" text="prodName" />
-            <TableColumn prefWidth="73.0" text="prodPrice" />
-            <TableColumn prefWidth="86.0" text="beggining" />
-            <TableColumn prefWidth="103.0" text="end" />
-         </columns>
-      </TableView>
-      <AnchorPane layoutX="693.0" layoutY="15.0" prefHeight="713.0" prefWidth="346.0" />
+      <AnchorPane VBox.vgrow="ALWAYS">
+         <children>
+            <SplitPane dividerPositions="0.65" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <items>
+                  <!-- Left side with table -->
+                  <AnchorPane>
+                     <children>
+                        <TableView fx:id="rentalTable" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <columns>
+                              <TableColumn fx:id="idColumn" text="id" />
+                              <TableColumn fx:id="clientColumn" text="client" />
+                              <TableColumn fx:id="productIdColumn" text="idProduct" />
+                              <TableColumn fx:id="productNameColumn" text="prodName" />
+                              <TableColumn fx:id="productPriceColumn" text="prodPrice" />
+                              <TableColumn fx:id="dateStartColumn" text="beggining" />
+                              <TableColumn fx:id="dateEndColumn" text="end" />
+                           </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+
+                  <!-- Right side with form -->
+                  <VBox spacing="15" style="-fx-padding: 15;">
+                     <children>
+                        <Label text="Add new rental" underline="true">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Label>
+
+                        <VBox spacing="5">
+                           <Label text="client" />
+                           <ComboBox fx:id="cmbClient" maxWidth="Infinity" />
+                        </VBox>
+
+                        <VBox spacing="5">
+                           <Label text="Product" />
+                           <ListView fx:id="listViewProduct" maxWidth="Infinity" />
+                        </VBox>
+                        <VBox spacing="5">
+                           <Label text="StartDate" />
+                           <DatePicker fx:id="startDatePicker" maxWidth="Infinity" />
+                        </VBox>
+                        <VBox spacing="5">
+                           <Label text="EndDate" />
+                           <DatePicker fx:id="endDatePicker" maxWidth="Infinity" />
+                        </VBox>
+                        <Button fx:id="addRentalBtn" maxWidth="Infinity" text="Add rental" />
+                     </children>
+                  </VBox>
+               </items>
+            </SplitPane>
+         </children>
+      </AnchorPane>
    </children>
-</Pane>
+</VBox>

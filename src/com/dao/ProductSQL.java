@@ -5,10 +5,11 @@ import com.model.Product;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class ProductSQL {
-    public ArrayList<Product> loadProducts(){
+    public static  ArrayList<Product> loadProducts(){
         ArrayList<Product> products = new ArrayList<>();
 
         try{
@@ -24,7 +25,8 @@ public class ProductSQL {
                                 rs.getString("brand"),
                                 rs.getString("category"),
                                 rs.getDouble("cost_price"),
-                                rs.getDouble("sell_price")
+                                rs.getDouble("sell_price"),
+                                rs.getBoolean("rented")
                         )
                 );
             }
@@ -36,44 +38,39 @@ public class ProductSQL {
         return products;
     }
 
-    public boolean addProduct(Product product) {
-        try (Connection conn = ConnectionSQL.getConnection();
-             PreparedStatement stmt = conn.prepareStatement("INSERT INTO products (id, name, brand, category, costPrice, sellPrice) VALUES (?, ?, ?, ?, ?, ?)")) {
+    public static int addProduct(String name, String brand, String category, double costPrice, double sellPrice) {
+        try {
+            Connection conn = ConnectionSQL.getConnection();
+             PreparedStatement stmt = conn.prepareStatement("INSERT INTO products (name, brand, category, cost_price, sell_price) VALUES (?, ?, ?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS);
 
-            stmt.setInt(1, product.getId());
-            stmt.setString(2, product.getName());
-            stmt.setString(3, product.getBrand());
-            stmt.setString(4, product.getCategory());
-            stmt.setDouble(5, product.getCostPrice());
-            stmt.setDouble(6, product.getSellPrice());
+            stmt.setString(1, name);
+            stmt.setString(2, brand);
+            stmt.setString(3, category);
+            stmt.setDouble(4, costPrice);
+            stmt.setDouble(5, sellPrice);
 
-            return stmt.executeUpdate() > 0;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
+            stmt.executeUpdate();
 
-    public Product getProductById(int id) {
-        try (Connection conn = ConnectionSQL.getConnection();
-             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM products WHERE id = ?")) {
-
-            stmt.setInt(1, id);
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                return new Product(
-                        rs.getInt("id"),
-                        rs.getString("name"),
-                        rs.getString("brand"),
-                        rs.getString("category"),
-                        rs.getDouble("costPrice"),
-                        rs.getDouble("sellPrice")
-                );
+            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    return generatedKeys.getInt(1); // Return the generated product ID
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return -1;
     }
+    public static boolean deleteProduct(int id) {
+        String sql = "DELETE FROM products WHERE id = ?";
+        Connection conn = ConnectionSQL.getConnection();
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, id);
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }

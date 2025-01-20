@@ -36,11 +36,4 @@ public class ConnectionSQL {
         }
         return connection;
     }
-
-    // Optional: method to close the connection when you're done
-    public static void closeConnection() throws SQLException {
-        if (connection != null && !connection.isClosed()) {
-            connection.close();
-        }
-    }
 }

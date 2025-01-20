@@ -12,17 +12,21 @@ import javafx.scene.layout.VBox;
 import javafx.scene.Node;
 
 public class MainController {
+    private static MainController instance;
     @FXML
     private Pane mainPane;
 
     @FXML
     private Button rentalsBtn;
-
     @FXML
     private Button productsBtn;
+    @FXML
+    private Button clientsBtn;
+
 
     @FXML
     public void initialize(){
+        instance = this;
         try {
             loadSection("../resources/rentalsPane.fxml"); // Load the default section
         } catch (Exception e) {
@@ -30,12 +34,25 @@ public class MainController {
         }
         rentalsBtn.setOnAction(e -> loadSection("../resources/rentalsPane.fxml"));
         productsBtn.setOnAction( e -> loadSection("../resources/productsPane.fxml") );
+        clientsBtn.setOnAction( e -> loadSection("../resources/clientsPane.fxml") );
+
+    }
+    public static MainController getInstance() {
+        return instance;
+    }
+    public void loadSection(String fxml) {
+        loadSection(fxml, null);
     }
 
-    public void loadSection(String fxml){
+    public void loadSection(String fxml, Object optionalData){
         try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxml));
             Node node = loader.load();
+
+            if(optionalData != null){
+                RentalsController.getInstance().showClientRentals((Integer) optionalData);
+            }
+
             mainPane.getChildren().clear();
             mainPane.getChildren().add(node);
         }catch (Exception err){
